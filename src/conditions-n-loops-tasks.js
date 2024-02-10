@@ -40,15 +40,12 @@ function isPositive(number) {
  */
 function getMaxNumber(a, b, c) {
   let max = a;
-
   if (b > max) {
     max = b;
   }
-
   if (c > max) {
     max = c;
   }
-
   return max;
 }
 
@@ -70,8 +67,12 @@ function getMaxNumber(a, b, c) {
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  */
-function canQueenCaptureKing(/* queen, king */) {
-  throw new Error('Not implemented');
+function canQueenCaptureKing(queen, king) {
+  return (
+    queen.x === king.x ||
+    queen.y === king.y ||
+    Math.abs(queen.x - king.x) === Math.abs(queen.y - king.y)
+  );
 }
 
 /**
@@ -92,8 +93,10 @@ function canQueenCaptureKing(/* queen, king */) {
  *  2, 2, 5   => false
  *  3, 0, 3   => false
  */
-function isIsoscelesTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isIsoscelesTriangle(a, b, c) {
+  return (
+    (a === b || b === c || a === c) && !(a + b <= c || a + c <= b || b + c <= a)
+  );
 }
 
 /**
@@ -110,8 +113,25 @@ function isIsoscelesTriangle(/* a, b, c */) {
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
-  throw new Error('Not implemented');
+function convertToRomanNumerals(num) {
+  if (num < 1 || num > 39) {
+    return Error(
+      'Number out of range. Please provide a number between 1 and 39.'
+    );
+  }
+  let result = '';
+  let tmp = num;
+  const symbols = ['X', 'IX', 'V', 'IV', 'I'];
+  const values = [10, 9, 5, 4, 1];
+
+  for (let i = 0; i < symbols.length; i += 1) {
+    while (tmp >= values[i]) {
+      result += symbols[i];
+      tmp -= values[i];
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -129,8 +149,74 @@ function convertToRomanNumerals(/* num */) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
+function convertNumberToString(numberStr) {
+  let result = '';
+  let isNegative = false;
+
+  let modifiedNumberStr = numberStr;
+
+  if (modifiedNumberStr[0] === '-') {
+    isNegative = true;
+    let tmp = '';
+    for (let i = 1; i < modifiedNumberStr.length; i += 1) {
+      tmp += modifiedNumberStr[i];
+    }
+    modifiedNumberStr = tmp;
+  }
+
+  const convertDigitToWord = (digit) => {
+    switch (digit) {
+      case '0':
+        return 'zero';
+      case '1':
+        return 'one';
+      case '2':
+        return 'two';
+      case '3':
+        return 'three';
+      case '4':
+        return 'four';
+      case '5':
+        return 'five';
+      case '6':
+        return 'six';
+      case '7':
+        return 'seven';
+      case '8':
+        return 'eight';
+      case '9':
+        return 'nine';
+      default:
+        return '';
+    }
+  };
+
+  for (let i = 0; i < modifiedNumberStr.length; i += 1) {
+    const currentChar = modifiedNumberStr[i];
+    if (currentChar >= '0' && currentChar <= '9') {
+      const digitWord = convertDigitToWord(currentChar);
+      const isDecimalPoint =
+        (i < modifiedNumberStr.length - 1 &&
+          modifiedNumberStr[i + 1] === '.') ||
+        modifiedNumberStr[i + 1] === ',';
+
+      if (isDecimalPoint) {
+        result += `${digitWord} point `;
+        i += 1;
+      } else {
+        result += `${digitWord} `;
+      }
+    }
+  }
+  if (isNegative) {
+    result = `minus ${result}`;
+  }
+  let tmpResult = '';
+  for (let j = 0; j < result.length - 1; j += 1) {
+    tmpResult += result[j];
+  }
+  result = tmpResult;
+  return result;
 }
 
 /**
